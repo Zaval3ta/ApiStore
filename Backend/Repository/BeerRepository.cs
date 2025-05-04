@@ -1,38 +1,36 @@
 ﻿using Backend.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Backend.Repository
 {
     public class BeerRepository : IRepository<Beer>
     {
-        public async Task<IEnumerable<Beer>> Get()
+        private StoreContext _context;
+        public BeerRepository(StoreContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
+
+        public async Task<IEnumerable<Beer>> Get()
+            => await _context.Beers.ToListAsync();
 
         public async Task<Beer> GetById(int id)
+            => await _context.Beers.FindAsync(id);
+
+        public async Task Add(Beer beer)
+            => await _context.Beers.AddAsync(beer);
+
+        public void Update(Beer beer)
         {
-            throw new NotImplementedException();
+            _context.Beers.Attach(beer);
+            _context.Beers.Entry(beer).State = EntityState.Modified; 
         }
 
-        public async Task Add(Beer entity)
-        {
-            throw new NotImplementedException();
-        }
+        public void Delete(Beer beer)
+            => _context.Beers.Remove(beer);
 
-        public void Update(Beer entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Beer entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Save()
-        {
-            throw new NotImplementedException();
-        }
-
+        public async Task Save()
+            => await _context.SaveChangesAsync();
     }
 }
