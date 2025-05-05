@@ -1,3 +1,4 @@
+using Backend.Automappers;
 using Backend.DTOs;
 using Backend.Models;
 using Backend.Repository;
@@ -26,6 +27,11 @@ builder.Services.AddDbContext<StoreContext>(options =>
 //Validators
 builder.Services.AddScoped<IValidator<BeerInsertDto>, BeerInsertValidator>();
 builder.Services.AddScoped<IValidator<BeerUpdateDto>, BeerUpdateValidator>();
+
+//Mappers
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
